@@ -1,0 +1,140 @@
+* {
+  margin: 0%;
+  padding: 0%;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+.page-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.content-wrap {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+  padding-bottom: 4rem; 
+}
+
+.footer {
+  background-color: aqua;
+  text-align: center;
+  padding: 0.5rem;
+  font-weight: bold;
+}
+
+.nav {
+  display: flex;
+  background-color: aqua;
+}
+
+.nav-title {
+  margin: 0.7rem;
+  padding: 0.7rem;
+}
+
+.nav-ul li {
+  display: inline-block;
+  color: aliceblue;
+  margin: 0.8rem;
+  padding: 0.8rem;
+}
+
+.nav-ul li a {
+  color: black;
+  text-decoration: none;
+}
+
+.signup, .AddProduct, .Login {
+  position: relative;
+  left: 35%;
+  padding: 2rem;
+  max-width: 30rem;
+}
+
+.signupForm, .AddProductForm, .LoginForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+
+}
+.AddProduct h1{
+  margin: 2rem;
+}
+.AddProductForm input {
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.AddProductForm input:focus {
+  outline: none;
+  border-color: aqua;
+  box-shadow: 0 0 5px rgba(0, 204, 204, 0.5);
+}
+
+.AddProductForm button {
+  padding: 0.75rem;
+  font-size: 1rem;
+  background-color:aqua;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.AddProductForm button:hover {
+  background-color: aqua;
+}
+
+.invalid-input {
+  color: red;
+  font-size: 0.9rem;
+  margin-top: -1rem;
+  margin-bottom: -1rem;
+}
+
+.nav-right {
+  margin-left: auto;
+}
+
+.logout-item {
+  margin-left: auto;
+}
+
+.logo {
+  width: 5rem;
+  padding: 0.3rem;
+  margin-left: 1rem;
+  border-radius: 30%;
+}
+
+.ListProducts {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.ListProducts ul li {
+  display: inline-block;
+  padding: 1.5rem;
+  border: 2px solid aqua;
+  width: 6.5rem;
+}
+
+.searchBox {
+  width: 20rem;
+  height: 2rem;
+  margin: 1rem auto;
+}
