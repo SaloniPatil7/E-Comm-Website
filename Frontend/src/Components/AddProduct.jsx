@@ -1,5 +1,5 @@
 import { useState } from "react";
-import './Nav.css';
+import './Components.css';
 import { useNavigate } from "react-router-dom";
 export default function AddProduct() {
     const [name, setName] = useState('');
@@ -26,7 +26,6 @@ export default function AddProduct() {
             },
         });
         result = await result.json();
-        console.log(result);
         alert('Product added');
         navigate('/');
     }

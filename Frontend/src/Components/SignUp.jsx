@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import './Nav.css';
+import './Components.css';
 import { useNavigate } from 'react-router-dom'
 export default function SignUp() {
   const [value, setValue] = useState({ name: "", email: "", password: "" });
@@ -12,31 +12,31 @@ export default function SignUp() {
 
 
   const collectData = async (e) => {
-  e.preventDefault();
-  const { name, email, password } = value;
+    e.preventDefault();
+    const { name, email, password } = value;
 
-  try {
-    const response = await fetch('http://localhost:3000/signup', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ name, email, password }),
-    });
+    try {
+      const response = await fetch('http://localhost:3000/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ name, email, password }),
+      });
 
-    if (response.ok) {
-      const data = await response.json();
-      localStorage.setItem("user", JSON.stringify(data.user));
-      localStorage.setItem("token", data.auth); // ✅ don't stringify the token itself
-      navigate('/');
-    } else {
-      const text = await response.text(); // fallback if response is plain text
-      console.error("Signup failed:", text);
+      if (response.ok) {
+        const data = await response.json();
+        localStorage.setItem("user", JSON.stringify(data.user));
+        localStorage.setItem("token", data.auth);
+        navigate('/');
+      } else {
+        const text = await response.text();
+        console.error("Signup failed:", text);
+      }
+    } catch (error) {
+      console.error("Signup failed:", error);
     }
-  } catch (error) {
-    console.error("Signup failed:", error);
-  }
-};
+  };
 
 
 

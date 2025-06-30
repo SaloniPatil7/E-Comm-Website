@@ -13,14 +13,16 @@ export default function AllRoutes() {
             <Routes >
 
                 <Route element={<PrivateComponent />}>
-                    <Route path="/" element={<ListProducts/>} />
-                    <Route path="/add" element={<AddProduct/>} />
-                    <Route path="/update/:id" element={<UpdateProduct/>} />
+                    <Route path="/" element={<ListProducts />} />
+                    <Route path="/add" element={<AddProduct />} />
+                    <Route path="/update/:id" element={<UpdateProduct />} />
                     <Route path="/logout" element={<h1> logout</h1>} />
                 </Route>
 
                 <Route path="/signup" element={<SignUp />} />
-                <Route path="/login" element={<Login/>} />
+                <Route path="/login" element={<Login />} />
+
+                <Route path="*" element={<h1>404 - Page Not Found</h1>} />
             </Routes>
 
         </>

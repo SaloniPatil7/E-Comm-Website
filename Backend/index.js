@@ -7,7 +7,8 @@ const cors = require('cors');
 const Jwt = require('jsonwebtoken');
 require('dotenv').config();
 const jwtKey = process.env.JWT_KEY;
-
+const PORT = process.env.PORT || 3000;
+DB_URL = process.env.ATLASDB_URL
 
 
 
@@ -18,19 +19,19 @@ app.use(express.json())
 main().catch(err => console.log(err));
 
 async function main() {
-  await mongoose.connect('mongodb://127.0.0.1:27017/e-comm');
+  await mongoose.connect(DB_URL);
 
 }
 
 
-app.listen('3000', () => {
-  console.log('listening')
+app.listen(PORT, () => {
+  console.log('listening');
 })
 app.get('', (req, res) => {
   res.send("done");
 })
 
-app.post('/signup',  async (req, res) => {
+app.post('/signup', async (req, res) => {
   let user = new User(req.body);
   let result = await user.save();
   result = result.toObject();
@@ -45,7 +46,7 @@ app.post('/signup',  async (req, res) => {
   });
 })
 
-app.post('/login',async (req, res) => {
+app.post('/login', async (req, res) => {
   if (req.body.password && req.body.email) {
     let result = await User.findOne(req.body).select("-password");
     if (result) {
@@ -68,7 +69,7 @@ app.post('/login',async (req, res) => {
 })
 
 
-app.post('/add-product', verifyToken,  async (req, res) => {
+app.post('/add-product', verifyToken, async (req, res) => {
   let product = new Product(req.body);
   let result = await product.save();
   res.send(result);
@@ -96,11 +97,10 @@ app.delete('/delete/:id', verifyToken, async (req, res) => {
   }
 })
 
-app.put('/update/:id', verifyToken,async (req, res) => {
+app.put('/update/:id', verifyToken, async (req, res) => {
   let { id } = req.params;
   console.log(id);
   let result = await Product.findById(id);
-  console.log(result);
   if (result) {
     res.send({ message: "Product Updated" });
   } else {
@@ -145,21 +145,20 @@ app.get('/search/:key', verifyToken, async (req, res) => {
 
 })
 
+
+// middleware
 function verifyToken(req, res, next) {
   let token = req.headers['authorization'];
   if (token) {
-    token = token.split(' ')[1]; // ✅ get only the token part after "Bearer"
-    console.log(token);
+    token = token.split(' ')[1]; 
     Jwt.verify(token, jwtKey, (err, valid) => {
       if (err) {
-        console.log(token);
-        return res.status(401).send({result:"please send valid token "});
+        return res.status(401).send({ result: "please send valid token " });
       } else {
-        console.log(token);
-        next(); // ✅ only called if token is valid
+        next(); 
       }
     });
   } else {
-    return res.status(403).send({result:"please send token with header"});
+    return res.status(403).send({ result: "please send token with header" });
   }
 }
