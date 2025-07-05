@@ -14,7 +14,7 @@ export default function ListProducts() {
 
     async function listAllProducts() {
         try {
-            const response = await fetch('https://e-comm-website-1-pjbl.onrender.com/products', {
+            const response = await fetch('https://e-comm-website-backend.onrender.com/products', {
                 headers: {
                     authorization: `Bearer ${localStorage.getItem('token')}`
                 }
@@ -34,7 +34,7 @@ export default function ListProducts() {
 
     async function deleteProduct(id) {
         try {
-            const response = await fetch('http://localhost:3000/delete/' + id, {
+            const response = await fetch('https://e-comm-website-backend.onrender.com/delete/' + id, {
                 method: 'DELETE',
                 headers: {
                     authorization: `Bearer ${localStorage.getItem('token')}`
