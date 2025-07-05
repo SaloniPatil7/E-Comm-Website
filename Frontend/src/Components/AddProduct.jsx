@@ -17,7 +17,7 @@ export default function AddProduct() {
 
         let storedUser = JSON.parse(localStorage.getItem('user'));
         let userID = storedUser._id;
-        let result = await fetch('http://localhost:3000/add-product', {
+        let result = await fetch('https://e-comm-website-backend.onrender.com/add-product', {
             method: 'post',
             body: JSON.stringify({ name, price, userID, category, company }),
             headers: {

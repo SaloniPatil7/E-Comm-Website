@@ -32,19 +32,25 @@ app.get('', (req, res) => {
 })
 
 app.post('/signup', async (req, res) => {
-  let user = new User(req.body);
-  let result = await user.save();
-  result = result.toObject();
-  delete result.password;
-  Jwt.sign({ result }, jwtKey, { expiresIn: '2h' }, (err, token) => {
-    if (err) {
-      res.send({ result: "something went wrong" })
-    } else {
-      res.send({ user: result, auth: token });
-    }
+  try {
+    let user = new User(req.body);
+    let result = await user.save();
+    result = result.toObject();
+    delete result.password;
 
-  });
-})
+    Jwt.sign({ result }, jwtKey, { expiresIn: '2h' }, (err, token) => {
+      if (err) {
+        return res.status(500).json({ error: "Token generation failed" });
+      } else {
+        res.status(200).json({ user: result, auth: token });
+      }
+    });
+  } catch (err) {
+    console.error("Signup Error:", err);
+    res.status(400).json({ error: "Signup failed", message: err.message });
+  }
+});
+
 
 app.post('/login', async (req, res) => {
   if (req.body.password && req.body.email) {

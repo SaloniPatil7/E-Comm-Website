@@ -12,31 +12,51 @@ export default function SignUp() {
 
 
   const collectData = async (e) => {
-    e.preventDefault();
-    const { name, email, password } = value;
+  e.preventDefault();
+  const { name, email, password } = value;
 
-    try {
-      const response = await fetch('http://localhost:3000/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ name, email, password }),
-      });
+  if (!name || !email || !password) {
+    alert("Please fill in all fields.");
+    return;
+  }
 
-      if (response.ok) {
-        const data = await response.json();
-        localStorage.setItem("user", JSON.stringify(data.user));
-        localStorage.setItem("token", data.auth);
-        navigate('/');
+  try {
+    const response = await fetch('https://e-comm-website-backend.onrender.com/signup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ name, email, password }),
+    });
+
+   
+    const contentType = response.headers.get("content-type");
+
+    if (response.ok) {
+      const data = contentType && contentType.includes("application/json")
+        ? await response.json()
+        : {};
+
+      localStorage.setItem("user", JSON.stringify(data.user));
+      localStorage.setItem("token", data.auth);
+      navigate('/');
+    } else {
+      if (contentType && contentType.includes("application/json")) {
+        const error = await response.json();
+        console.error("Signup failed:", error.error || error.message);
+        alert(error.error || "Signup failed");
       } else {
         const text = await response.text();
-        console.error("Signup failed:", text);
+        console.error("Signup failed (non-JSON):", text);
+        alert("Signup failed: " + text);
       }
-    } catch (error) {
-      console.error("Signup failed:", error);
     }
-  };
+  } catch (error) {
+    console.error("Signup failed:", error);
+    alert("Something went wrong. Please try again later.");
+  }
+};
+
 
 
 

@@ -14,7 +14,7 @@ export default function ListProducts() {
 
     async function listAllProducts() {
         try {
-            const response = await fetch('http://localhost:3000/products', {
+            const response = await fetch('https://e-comm-website-1-pjbl.onrender.com/products', {
                 headers: {
                     authorization: `Bearer ${localStorage.getItem('token')}`
                 }
@@ -59,7 +59,7 @@ export default function ListProducts() {
 
         if (key.trim()) {
             try {
-                const response = await fetch('http://localhost:3000/search/' + key, {
+                const response = await fetch('https://e-comm-website-backend.onrender.com/search/' + key, {
                     headers: {
                         authorization: `Bearer ${localStorage.getItem('token')}`
                     }
