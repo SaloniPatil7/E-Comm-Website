@@ -19,11 +19,18 @@ export default function UpdateProduct() {
 
     const fetchProductDetails = async () => {
         try {
-            const res = await fetch(`https://e-comm-website-1-pjbl.onrender.com/product/${id}`, {
+            const res = await fetch(`https://e-comm-website-backend.onrender.com/product/${id}`, {
                 headers: {
                     authorization: `Bearer ${localStorage.getItem('token')}`
                 }
             });
+
+            if (res.status === 401 || res.status === 403) {
+                localStorage.clear();
+                navigate('/login');
+                return;
+            }
+
             const data = await res.json();
             setProduct({
                 name: data.name || '',
@@ -46,7 +53,6 @@ export default function UpdateProduct() {
         e.preventDefault();
 
         const { name, price, category, company } = product;
-
 
         if (
             !name.trim() ||
@@ -72,6 +78,12 @@ export default function UpdateProduct() {
                     company: company.trim()
                 })
             });
+
+            if (res.status === 401 || res.status === 403) {
+                localStorage.clear();
+                navigate('/login');
+                return;
+            }
 
             if (res.ok) {
                 alert("Product updated successfully.");

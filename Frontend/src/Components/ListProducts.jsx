@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import './Components.css';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function ListProducts() {
     const [products, setProducts] = useState([]);
     const [searchKey, setSearchKey] = useState('');
     const [searchError, setSearchError] = useState('');
+    const navigate = useNavigate();
 
     useEffect(() => {
         listAllProducts();
@@ -18,6 +19,12 @@ export default function ListProducts() {
                     authorization: `Bearer ${localStorage.getItem('token')}`
                 }
             });
+
+            if (response.status === 401 || response.status === 403) {
+                localStorage.clear();
+                navigate('/login');
+                return;
+            }
 
             if (response.ok) {
                 const data = await response.json();
@@ -39,6 +46,12 @@ export default function ListProducts() {
                 }
             });
 
+            if (response.status === 401 || response.status === 403) {
+                localStorage.clear();
+                navigate('/login');
+                return;
+            }
+
             if (response.ok) {
                 setProducts(prev => prev.filter(product => product._id !== id));
             } else {
@@ -55,11 +68,11 @@ export default function ListProducts() {
 
         if (!key.trim()) {
             setSearchError('Please enter a valid search term');
-            listAllProducts(); // Reset to all products
+            listAllProducts();
             return;
         }
 
-        setSearchError(''); // Clear error if valid input
+        setSearchError('');
 
         try {
             const response = await fetch('https://e-comm-website-backend.onrender.com/search/' + key.trim(), {
@@ -67,6 +80,12 @@ export default function ListProducts() {
                     authorization: `Bearer ${localStorage.getItem('token')}`
                 }
             });
+
+            if (response.status === 401 || response.status === 403) {
+                localStorage.clear();
+                navigate('/login');
+                return;
+            }
 
             const result = await response.json();
             setProducts(result || []);
