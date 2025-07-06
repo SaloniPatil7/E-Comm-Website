@@ -11,16 +11,26 @@ export default function Login() {
     async function handleLogin(e) {
         e.preventDefault();
 
-        //  Client-side validation
-        if (!email.trim() || !password.trim()) {
+
+        const trimmedEmail = email.trim();
+        const trimmedPassword = password.trim();
+
+        if (!trimmedEmail || !trimmedPassword) {
             setError("Please fill in both fields.");
+            return;
+        }
+
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(trimmedEmail)) {
+            setError("Please enter a valid email address.");
             return;
         }
 
         try {
             const response = await fetch('https://e-comm-website-backend.onrender.com/login', {
                 method: 'POST',
-                body: JSON.stringify({ email, password }),
+                body: JSON.stringify({ email: trimmedEmail, password: trimmedPassword }),
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -41,7 +51,6 @@ export default function Login() {
         }
     }
 
-
     useEffect(() => {
         const auth = localStorage.getItem('user');
         if (auth) {
@@ -53,24 +62,29 @@ export default function Login() {
         <div className="Login">
             <h1>Login here</h1>
 
-            <form className="LoginForm" onSubmit={handleLogin}>
+            <form className="LoginForm" onSubmit={handleLogin} noValidate>
                 <input
                     type="email"
                     name="email"
                     placeholder="Enter Email"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => {
+                        setEmail(e.target.value);
+                        setError('');
+                    }}
                 />
                 <input
                     type="password"
                     name="password"
                     placeholder="Enter Password"
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={(e) => {
+                        setPassword(e.target.value);
+                        setError('');
+                    }}
                 />
                 <br />
                 <button type="submit">Login</button>
-
 
                 {error && <p className="invalid-input">{error}</p>}
             </form>

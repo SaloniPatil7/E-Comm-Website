@@ -46,7 +46,14 @@ export default function UpdateProduct() {
         e.preventDefault();
 
         const { name, price, category, company } = product;
-        if (!name || !price || !category || !company) {
+
+
+        if (
+            !name.trim() ||
+            !price.toString().trim() ||
+            !category.trim() ||
+            !company.trim()
+        ) {
             setError(true);
             return;
         }
@@ -58,7 +65,12 @@ export default function UpdateProduct() {
                     'Content-Type': 'application/json',
                     authorization: `Bearer ${localStorage.getItem('token')}`
                 },
-                body: JSON.stringify(product)
+                body: JSON.stringify({
+                    name: name.trim(),
+                    price: price.toString().trim(),
+                    category: category.trim(),
+                    company: company.trim()
+                })
             });
 
             if (res.ok) {
@@ -81,13 +93,13 @@ export default function UpdateProduct() {
                 {['name', 'price', 'category', 'company'].map(field => (
                     <div key={field}>
                         <input
-                            type="text"
+                            type={field === 'price' ? 'number' : 'text'}
                             name={field}
                             placeholder={`Enter ${field.charAt(0).toUpperCase() + field.slice(1)}`}
                             value={product[field]}
                             onChange={handleChange}
                         />
-                        {error && !product[field] && (
+                        {error && !product[field].toString().trim() && (
                             <span className='invalid-input'>Enter valid {field}</span>
                         )}
                     </div>

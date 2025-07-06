@@ -5,12 +5,11 @@ import { Link } from "react-router-dom";
 export default function ListProducts() {
     const [products, setProducts] = useState([]);
     const [searchKey, setSearchKey] = useState('');
-
+    const [searchError, setSearchError] = useState('');
 
     useEffect(() => {
         listAllProducts();
     }, []);
-
 
     async function listAllProducts() {
         try {
@@ -31,7 +30,6 @@ export default function ListProducts() {
         }
     }
 
-
     async function deleteProduct(id) {
         try {
             const response = await fetch('https://e-comm-website-backend.onrender.com/delete/' + id, {
@@ -42,7 +40,6 @@ export default function ListProducts() {
             });
 
             if (response.ok) {
-
                 setProducts(prev => prev.filter(product => product._id !== id));
             } else {
                 console.error("Delete failed:", response.status);
@@ -52,33 +49,35 @@ export default function ListProducts() {
         }
     }
 
-
     async function handleSearch(e) {
         const key = e.target.value;
         setSearchKey(key);
 
-        if (key.trim()) {
-            try {
-                const response = await fetch('https://e-comm-website-backend.onrender.com/search/' + key, {
-                    headers: {
-                        authorization: `Bearer ${localStorage.getItem('token')}`
-                    }
-                });
+        if (!key.trim()) {
+            setSearchError('Please enter a valid search term');
+            listAllProducts(); // Reset to all products
+            return;
+        }
 
-                const result = await response.json();
-                setProducts(result || []);
-            } catch (err) {
-                console.error("Search failed:", err);
-            }
-        } else {
-            listAllProducts(); 
+        setSearchError(''); // Clear error if valid input
+
+        try {
+            const response = await fetch('https://e-comm-website-backend.onrender.com/search/' + key.trim(), {
+                headers: {
+                    authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+
+            const result = await response.json();
+            setProducts(result || []);
+        } catch (err) {
+            console.error("Search failed:", err);
         }
     }
 
     return (
         <div className='ListProducts'>
             <h1>Products List</h1>
-
 
             <input
                 type="text"
@@ -87,6 +86,7 @@ export default function ListProducts() {
                 value={searchKey}
                 onChange={handleSearch}
             />
+            {searchError && <span className="invalid-input">{searchError}</span>}
 
             <ul>
                 <li>Sr.No</li>
